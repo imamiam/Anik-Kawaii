@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('{{ base_url }}/static/img/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        z-index: -1;
+    }
+
+    .category-bubble {
+        background-color: var(--kawaii-pink);
+        color: white;
+        font-family: 'Rockwell', serif;
+        font-weight: 900;
+        padding: 8px 45px;
+        border-radius: 50px;
+        display: inline-block;
+        border: 4px solid white;
+        text-shadow: 2px 2px 0px var(--hot-pink);
+        margin-bottom: 25px;
+        box-shadow: 0px 4px 0px rgba(0,0,0,0.1);
+    }
+
+    .product-card {
+        background: white;
+        border: 5px solid #b9e9ff; /* Light Blue Border */
+        border-radius: 25px;
+        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--hot-pink);
+        box-shadow: 0px 10px 20px rgba(255, 146, 200, 0.3);
+    }
+
+    .product-img-container {
+        height: 180px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .product-info {
+        background: white;
+        padding: 12px;
+        text-align: center;
+        border-top: 2px solid #f0f0f0;
+    }
+
+    .see-more-btn {
+        background-color: var(--hot-pink);
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 20px;
+        padding: 6px 25px;
+        font-size: 0.8rem;
+        float: right;
+        transition: 0.2s;
+    }
+
+    .sort-btn {
+        background-color: var(--hot-pink);
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 15px;
+        padding: 8px 25px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+</style>
+
+<div class="container">
+    <div class="d-flex justify-content-end mb-4">
+        <button class="sort-btn">⇅ Sort</button>
+    </div>
+
+    {% for category_name, items in categories.items() %}
+    <div class="text-center mt-4">
+        <div class="category-bubble">{{ category_name }}</div>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 g-4 mb-3">
+        {% for item in items %}
+        <div class="col">
+            <div class="product-card h-100">
+                <div class="product-img-container">
+                    <img src="{{ base_url }}/static/img/products/{{ item.image }}" class="product-img" alt="{{ item.name }}">
+                </div>
+                <div class="product-info">
+                    <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">{{ item.name }}</h6>
+                    <p class="small fw-bold mb-0" style="color: var(--hot-pink);">₱{{ item.price }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="clearfix mb-5 pe-2">
+        <button class="see-more-btn">See More</button>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

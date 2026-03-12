@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} | Anik Kawaii</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --kawaii-pink: #ff92c8;
+            --hot-pink: #ff007f;
+            --anik-blue: #b9e9ff; /* Your Light Blue */
+            --neo-black: #000000;
+            --bg-soft: #fff4f9;
+            /* Defined the master Rockwell font stack here */
+            --anik-font: 'Rockwell', 'Rockwell Extra Bold', 'Courier New', serif;
+        }
+
+        body {
+            background-color: var(--bg-soft);
+            /* Applied Rockwell as the primary body font */
+            font-family: var(--anik-font);
+            color: var(--neo-black);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: var(--kawaii-pink) !important;
+            opacity: 1 !important;
+            z-index: 1050;
+            border-bottom: 4px solid var(--neo-black);
+        }
+
+        /* GLOBAL STYLES: This ensures the font matches everywhere 
+           (Navbar, Contact Bubbles, Headers) 
+        */
+        .nav-link-custom, 
+        .contact-bubble, 
+        .contact-intro, 
+        .category-bubble,
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--anik-font) !important;
+        }
+
+        /* The "Sticker" Text Style: Bold, White, with Dark Pink Border */
+        .nav-link-custom {
+            color: white !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.5px;
+            text-shadow: 
+                -2px -2px 0 var(--hot-pink),  
+                 2px -2px 0 var(--hot-pink),
+                -2px  2px 0 var(--hot-pink),
+                 2px  2px 0 var(--hot-pink),
+                 0px  3px 0px rgba(0,0,0,0.15);
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+        }
+
+        /* Hover: Changes to Light Blue with Black Border */
+        .nav-link-custom:hover {
+            color: var(--anik-blue) !important;
+            transform: scale(1.05);
+            text-shadow: 
+                -2px -2px 0 var(--neo-black),  
+                 2px -2px 0 var(--neo-black),
+                -2px  2px 0 var(--neo-black),
+                 2px  2px 0 var(--neo-black);
+        }
+
+        /* Special style for the Register button */
+        .btn-register-custom {
+            background: white !important;
+            border: 3px solid var(--neo-black) !important;
+            box-shadow: 4px 4px 0px var(--neo-black);
+            border-radius: 10px;
+            padding: 5px 20px !important;
+        }
+
+        .btn-register-custom:hover {
+            box-shadow: 2px 2px 0px var(--neo-black);
+            transform: translate(2px, 2px);
+            background-color: var(--anik-blue) !important;
+        }
+
+        /* Neo-Brutalism "Window" Container */
+        .neo-window {
+            background: white;
+            border: 3px solid var(--neo-black);
+            border-radius: 15px;
+            box-shadow: 10px 10px 0px var(--neo-black);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .neo-header {
+            background-color: var(--kawaii-pink);
+            border-bottom: 3px solid var(--neo-black);
+            padding: 10px 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .dot { height: 12px; width: 12px; border-radius: 50%; border: 2px solid black; display: inline-block; margin-right: 5px; }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .btn-kawaii {
+            background-color: var(--kawaii-pink);
+            border: 3px solid var(--neo-black);
+            font-weight: 800;
+            box-shadow: 4px 4px 0px var(--neo-black);
+            transition: 0.2s;
+        }
+
+        .btn-kawaii:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--neo-black);
+            background-color: #ffb1d8;
+        }
+    </style>
+</head>
+<body>
+    {% include "navigation.html" %}
+
+    <main class="container py-5">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

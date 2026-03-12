@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('{{ base_url }}/static/img/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        z-index: -1;
+    }
+
+    /* Updated to match your Navbar's Rockwell font and weight */
+    .contact-card {
+        background: white;
+        border-radius: 60px;
+        padding: 60px 20px;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        box-shadow: 0px 10px 30px rgba(0,0,0,0.05);
+        font-family: 'Rockwell', 'Rockwell Extra Bold', 'Courier New', serif;
+    }
+
+    /* Applied the sticker effect: Bold White Text with Dark Pink Border */
+    .contact-bubble {
+        background-color: var(--kawaii-pink);
+        color: white;
+        font-weight: 900;
+        padding: 10px 60px;
+        border-radius: 50px;
+        display: inline-block;
+        border: 4px solid white;
+        text-shadow: 
+            -2px -2px 0 var(--hot-pink),  
+             2px -2px 0 var(--hot-pink),
+            -2px  2px 0 var(--hot-pink),
+             2px  2px 0 var(--hot-pink),
+             0px  4px 0px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+        font-size: 2.8rem;
+    }
+
+    .contact-intro {
+        font-weight: 900;
+        font-size: 1.5rem;
+        color: var(--neo-black);
+        margin-bottom: 40px;
+    }
+
+    .social-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        max-width: 500px;
+        margin: 0 auto 30px auto;
+        text-align: left;
+        transition: transform 0.2s ease;
+    }
+
+    .social-row:hover {
+        transform: scale(1.05);
+    }
+
+    .social-icon {
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+        object-fit: contain;
+    }
+
+    .social-text h4 {
+        font-weight: 900;
+        margin-bottom: 0;
+        color: var(--neo-black);
+    }
+
+    .social-text p {
+        font-weight: 900;
+        color: var(--kawaii-pink);
+        margin-bottom: 0;
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="contact-card">
+        <div class="contact-bubble">Contact Us!</div>
+        
+        <p class="contact-intro">Chat with us on any of our social media handles!</p>
+
+        <div class="social-list">
+            <div class="social-row">
+                <img src="{{ base_url }}/static/img/tiktok_icon.png" class="social-icon" alt="TikTok">
+                <div class="social-text">
+                    <h4>Message us on TikTok!</h4>
+                    <p>@AnikKawaii</p>
+                </div>
+            </div>
+
+            <div class="social-row">
+                <img src="{{ base_url }}/static/img/instagram_icon.png" class="social-icon" alt="Instagram">
+                <div class="social-text">
+                    <h4>Message us on Instagram!</h4>
+                    <p>@anikkawaii</p>
+                </div>
+            </div>
+
+            <div class="social-row">
+                <img src="{{ base_url }}/static/img/facebook_icon.png" class="social-icon" alt="Facebook">
+                <div class="social-text">
+                    <h4>Message us on Facebook!</h4>
+                    <p>@Anik Kawaii</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

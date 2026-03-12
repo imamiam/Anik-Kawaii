@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('{{ base_url }}/static/img/bg2.jpg?v=2') !important;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.30);
+        z-index: -1;
+    }
+    .neo-window-glass {
+        background: rgba(255, 255, 255, 0.85) !important;
+        backdrop-filter: blur(10px);
+        border: 4px solid var(--neo-black);
+        border-radius: 20px;
+        box-shadow: 12px 12px 0px var(--neo-black);
+        overflow: hidden;
+        margin-bottom: 30px;
+        animation: fadeInScale 0.5s ease-out;
+    }
+    @keyframes fadeInScale {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+
+<div class="neo-window-glass">
+    <div class="neo-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span class="ms-2">welcome_to_anik_kawaii.exe</span>
+    </div>
+    <div class="p-5 text-center">
+        <h1 class="display-3 fw-bold mb-3">Curated Collectibles from the Heart of Japan</h1>
+        <p class="fs-4 text-dark mb-4 fw-medium">.✦ ݁˖ Curated collections of Japan sourced collectibles, figures, trinkets, and anik-anik! .✦ ݁˖</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ base_url }}/products" class="btn btn-kawaii btn-lg px-5">SHOP NOW</a>
+            <a href="{{ base_url }}/register" class="btn btn-outline-dark btn-lg px-5 fw-bold" style="border-width: 3px; background-color: white;">JOIN US</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

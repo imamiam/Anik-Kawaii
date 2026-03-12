@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="neo-window bg-white">
+            <div class="neo-header"><span class="ms-2">user_registration</span></div>
+            <div class="p-4">
+                {% if success %}<div class="alert alert-success border-3 border-dark fw-bold">{{ success }}</div>{% endif %}
+                {% if error %}<div class="alert alert-danger border-3 border-dark fw-bold">{{ error }}</div>{% endif %}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="fw-bold">Email</label>
+                        <input type="email" name="email" class="form-control border-3 border-dark">
+                    </div>
+                    <div class="mb-4">
+                        <label class="fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control border-3 border-dark">
+                    </div>
+                    <button type="submit" class="btn btn-kawaii w-100 py-2">CREATE ACCOUNT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
