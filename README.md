@@ -12,3 +12,5 @@ if __name__ == "__main__":
     run_simple("172.17.100.15", 5048, app, use_reloader=True)
 
   gunicorn --bind 172.17.100.15:5048 app:app
+
+pip install -r requirements.txt
