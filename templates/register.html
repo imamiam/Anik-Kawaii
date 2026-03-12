@@ -1,9 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+    body {
+        background-image: url('{{ base_url }}/static/img/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.15);
+        z-index: -1;
+    }
+</style>
+
 <div class="row justify-content-center">
     <div class="col-md-5">
         <div class="neo-window bg-white">
-            <div class="neo-header"><span class="ms-2">user_registration</span></div>
+            <div class="neo-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+                <span class="ms-2">user_registration.exe</span>
+            </div>
             <div class="p-4">
                 {% if success %}<div class="alert alert-success border-3 border-dark fw-bold">{{ success }}</div>{% endif %}
                 {% if error %}<div class="alert alert-danger border-3 border-dark fw-bold">{{ error }}</div>{% endif %}
@@ -11,11 +34,11 @@
                 <form method="POST">
                     <div class="mb-3">
                         <label class="fw-bold">Email</label>
-                        <input type="email" name="email" class="form-control border-3 border-dark">
+                        <input type="email" name="email" class="form-control border-3 border-dark" placeholder="hello@kawaii.com">
                     </div>
                     <div class="mb-4">
                         <label class="fw-bold">Password</label>
-                        <input type="password" name="password" class="form-control border-3 border-dark">
+                        <input type="password" name="password" class="form-control border-3 border-dark" placeholder="••••••••">
                     </div>
                     <button type="submit" class="btn btn-kawaii w-100 py-2">CREATE ACCOUNT</button>
                 </form>

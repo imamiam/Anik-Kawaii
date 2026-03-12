@@ -1,10 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+    body {
+        background-image: url('{{ base_url }}/static/img/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        z-index: -1;
+    }
+
+    .about-text {
+        font-family: 'Rockwell', serif; /* Matching your navbar font preference */
+        line-height: 1.6;
+    }
+</style>
+
 <div class="neo-window bg-white">
-    <div class="neo-header"><span class="ms-2">about_us.txt</span></div>
+    <div class="neo-header">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <span class="ms-2">about_us.txt</span>
+    </div>
     <div class="p-5">
-        <h2 class="fw-bold mb-3">All About Anik Kawaii!</h2>
-        <p class="fs-4 text-dark mb-4 fw-medium">Your Collection of all things from the Heart of Japan! At Anik Kawaii, we bring the magic of Japan straight to your doorstep with a curated selection of authentic, high-quality merch. From anime figures and plushies to cute keychain items, everything we offer is chosen to delight fans of Japanese pop culture.</p>
+        <h1 class="fw-bold mb-4" style="text-shadow: 2px 2px 0px var(--kawaii-pink);">All About Anik Kawaii! 🎀</h1>
+        <p class="fs-4 text-dark mb-4 fw-medium about-text">
+            Your Collection of all things from the Heart of Japan! At Anik Kawaii, we bring the magic of Japan straight to your doorstep with a curated selection of authentic, high-quality merch. From anime figures and plushies to cute keychain items, everything we offer is chosen to delight fans of Japanese pop culture.
+        </p>
     </div>
 </div>
 {% endblock %}
