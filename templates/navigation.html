@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container">
-    <a class="navbar-brand fw-bold nav-link-custom" href="{{ base_url }}/" style="font-size: 1.8rem;">Anik Kawaii</a>
+    <a class="navbar-brand fw-bold nav-link-custom" href="{{ base_url }}/?admin={{ is_admin }}&user_id={{ user_id }}" style="font-size: 1.8rem;">Anik Kawaii</a>
     
     <button class="navbar-toggler border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -9,25 +9,20 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
-          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/">Home</a>
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/?admin={{ is_admin }}&user_id={{ user_id }}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/products">Products</a>
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/products?admin={{ is_admin }}&user_id={{ user_id }}">Products</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/thecompany">About</a>
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/thecompany?admin={{ is_admin }}&user_id={{ user_id }}">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/contactus">Contact</a>
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/contactus?admin={{ is_admin }}&user_id={{ user_id }}">Contact</a>
         </li>
-
-        {# Only show the Add button in the nav if the user is an admin #}
-        {% if is_admin %}
-        <li class="nav-item">
-          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/add_product" style="color: #ff69b4; font-weight: bold;">+ Add</a>
-        </li>
-        {% endif %}
         
+        {# Only show Login/Register if not logged in #}
+        {% if not user_id %}
         <li class="nav-item ms-lg-3">
           <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/login">Login</a>
         </li>
@@ -35,6 +30,11 @@
         <li class="nav-item">
           <a class="nav-link nav-link-custom btn-register-custom" href="{{ base_url }}/register">Register</a>
         </li>
+        {% else %}
+        <li class="nav-item ms-lg-3">
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/" style="color: #ff69b4;">Logout</a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </div>
