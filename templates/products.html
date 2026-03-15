@@ -1,48 +1,135 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="neo-window bg-white mx-auto" style="max-width: 900px;">
-    <div class="neo-header">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-yellow"></div>
-        <div class="dot dot-green"></div>
-        <span class="ms-2" style="font-family: 'Rockwell', serif;">anik_inventory.exe</span>
+<style>
+    /* 1. Background Logic */
+    body {
+        background-image: url('{{ base_url }}/static/img/bg.jpg');
+        background-size: auto;
+        background-attachment: fixed;
+        background-repeat: repeat;
+    }
+
+    /* 2. Pink & White Category "Stickers" */
+    .category-header {
+        background-color: #ff69b4; /* Hot Pink */
+        color: white;             /* White Text */
+        border: 4px solid white;  /* Thick White Border */
+        border-radius: 50px;
+        padding: 10px 45px;
+        display: inline-block;
+        font-family: 'Rockwell', serif;
+        font-weight: bold;
+        box-shadow: 0 6px 12px rgba(255, 105, 180, 0.3);
+        /* Changed to none to allow the Jinja capitalization to show */
+        text-transform: none !important;
+        letter-spacing: 0.5px;
+    }
+
+    /* 3. Kawaii Cards with Hover Effects */
+    .kawaii-card {
+        background: white;
+        border: 4px solid #bde0fe !important; /* Start with Light Blue */
+        border-radius: 25px !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+    }
+
+    .kawaii-card:hover {
+        border-color: #ff69b4 !important; /* Turns Pink on Hover */
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(255, 105, 180, 0.2);
+    }
+
+    /* 4. Layout Helpers */
+    .product-image-container {
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background-color: #fff;
+    }
+
+    .price-text {
+        color: #ff69b4;
+        font-weight: bold;
+        font-size: 1.2rem;
+        font-family: 'Rockwell', serif;
+    }
+
+    .btn-admin-sm {
+        font-size: 0.75rem;
+        border-radius: 12px;
+        padding: 4px 12px;
+        border-width: 2px;
+    }
+</style>
+
+<div class="container py-5">
+    {# Success Message Alert #}
+    {% if msg %}
+    <div class="alert alert-success border-0 shadow-sm fw-bold mb-5 text-center" 
+         style="border-radius: 20px; background-color: rgba(255, 255, 255, 0.9); color: #ff69b4;">
+        {{ msg }} ✨
     </div>
-    
-    <div class="card-body p-0">
-        <ul class="list-group list-group-flush">
-          {% for product in product_items %}
-            <li class="list-group-item py-4 px-4 border-bottom border-2">
-              <div class="row align-items-center">
-                <div class="col-md-3 text-center">
-                    <img src="{{ base_url }}/static/img/products/{{ product.image }}" 
-                         alt="{{ product.name }}" 
-                         class="img-fluid rounded border border-3 border-dark shadow-sm"
-                         style="max-height: 120px; background: #fff;">
-                </div>
-                
-                <div class="col-md-9">
-                  <div class="d-flex w-100 justify-content-between align-items-start">
-                    <h3 class="mb-1 text-primary fw-bold" style="font-family: 'Rockwell', serif;">{{ product.name }}</h3>
-                    <span class="badge bg-success rounded-pill px-3 py-2 fs-5" style="border: 2px solid black; box-shadow: 3px 3px 0px black;">
-                        ${{ "{:,.2f}".format(product.price) }}
-                    </span>
-                  </div>
-                  <p class="text-muted mb-2 fw-bold">Brand: {{ product.brand }}</p>
-                  <p class="mb-0 small fw-bold">In Stock: 
-                    <span class="{% if product.stock < 5 %}text-danger{% else %}text-success{% endif %}">
-                        {{ product.stock }} units
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </li>
-          {% else %}
-            <li class="list-group-item py-5 text-center">
-                <p class="text-muted">No products found. 🌸</p>
-            </li>
-          {% endfor %}
-        </ul>
+    {% endif %}
+
+    {# Admin "Add" Button #}
+    {% if is_admin %}
+    <div class="text-end mb-5">
+        <a href="{{ base_url }}/add_product" class="btn btn-kawaii px-4 py-2 fw-bold shadow border-3 border-white" 
+           style="border-radius: 50px; background-color: #ff69b4; color: white;">
+            + Add New Merch
+        </a>
     </div>
+    {% endif %}
+
+    {# Category Grouping Loop #}
+    {% for category, items in product_items|groupby('category') %}
+    <div class="category-section mb-5">
+        <div class="text-center mb-5">
+            <h2 class="category-header">
+                {# Changed |lower to |capitalize #}
+                {{ category|capitalize }}s
+            </h2>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for product in items %}
+            <div class="col">
+                <div class="card h-100 kawaii-card shadow-sm">
+                    <div class="product-image-container">
+                        <img src="{{ base_url }}/static/img/products/{{ product.image }}" 
+                             class="img-fluid" style="max-height: 100%; object-fit: contain;" alt="{{ product.name }}">
+                    </div>
+                    
+                    <div class="card-body text-center border-top border-light p-4">
+                        <h5 class="fw-bold mb-1" style="color: #333;">{{ product.name }}</h5>
+                        <p class="price-text mb-3">₱{{ "{:,.0f}".format(product.price) }}</p>
+                        
+                        {# Stock Indicator #}
+                        <div class="mb-3">
+                            <span class="badge {% if product.stock < 5 %}bg-danger{% else %}bg-primary{% endif %} rounded-pill px-3">
+                                Stock: {{ product.stock }}
+                            </span>
+                        </div>
+
+                        {# Admin Edit/Delete Controls #}
+                        {% if is_admin %}
+                        <div class="d-flex gap-2 justify-content-center mt-3 pt-3 border-top">
+                            <a href="{{ base_url }}/edit/{{ product.id }}" class="btn btn-admin-sm btn-outline-secondary fw-bold">Edit</a>
+                            <a href="{{ base_url }}/delete/{{ product.id }}" 
+                               class="btn btn-admin-sm btn-danger fw-bold" 
+                               onclick="return confirm('Really delete {{ product.name }}?')">Del</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

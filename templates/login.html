@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    body {
+        background-image: url('{{ base_url }}/static/img/bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.15);
+        z-index: -1;
+    }
+</style>
+
+<div class="row justify-content-center" style="margin-top: 50px;">
+    <div class="col-md-5">
+        <div class="neo-window bg-white">
+            <div class="neo-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+                <span class="ms-2">user_auth.exe</span>
+            </div>
+            <div class="p-4">
+                <h2 class="text-center fw-bold mb-4" style="font-family: 'Rockwell', serif; color: #000;">
+                    🌸 Welcome Back! 🌸
+                </h2>
+                
+                {% if error %}
+                    <div class="alert alert-danger border-3 border-dark fw-bold">{{ error }}</div>
+                {% endif %}
+
+                <form action="/login" method="POST">
+                    <div class="mb-3 text-start">
+                        <label class="fw-bold">Email</label>
+                        <input type="email" name="email" class="form-control border-3 border-dark" placeholder="hello@kawaii.com" required>
+                    </div>
+                    <div class="mb-4 text-start">
+                        <label class="fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control border-3 border-dark" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-kawaii w-100 py-2 fw-bold border-3 border-dark" style="box-shadow: 4px 4px 0px black;">
+                        LOGIN TO ANIK KAWAII ✨
+                    </button>
+                </form>
+                
+                <div class="mt-4 pt-3 border-top border-2 border-dark text-center">
+                    <p class="mb-0 fw-bold">Don't have an account? 
+                        <a href="{{ base_url }}/register" style="color: #ff69b4; text-decoration: underline;">Create one here!</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

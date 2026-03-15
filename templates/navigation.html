@@ -20,7 +20,19 @@
         <li class="nav-item">
           <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/contactus">Contact</a>
         </li>
+
+        {# Only show the Add button in the nav if the user is an admin #}
+        {% if is_admin %}
+        <li class="nav-item">
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/add_product" style="color: #ff69b4; font-weight: bold;">+ Add</a>
+        </li>
+        {% endif %}
+        
         <li class="nav-item ms-lg-3">
+          <a class="nav-link nav-link-custom mx-2" href="{{ base_url }}/login">Login</a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link nav-link-custom btn-register-custom" href="{{ base_url }}/register">Register</a>
         </li>
       </ul>

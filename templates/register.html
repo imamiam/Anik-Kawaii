@@ -18,7 +18,7 @@
     }
 </style>
 
-<div class="row justify-content-center">
+<div class="row justify-content-center" style="margin-top: 50px;">
     <div class="col-md-5">
         <div class="neo-window bg-white">
             <div class="neo-header">
@@ -28,20 +28,30 @@
                 <span class="ms-2">user_registration.exe</span>
             </div>
             <div class="p-4">
+                <h2 class="text-center fw-bold mb-4" style="font-family: 'Rockwell', serif;">
+                   ✨ Become a Member! ✨
+                </h2>
+
                 {% if success %}<div class="alert alert-success border-3 border-dark fw-bold">{{ success }}</div>{% endif %}
                 {% if error %}<div class="alert alert-danger border-3 border-dark fw-bold">{{ error }}</div>{% endif %}
                 
                 <form method="POST">
-                    <div class="mb-3">
+                    <div class="mb-3 text-start">
                         <label class="fw-bold">Email</label>
-                        <input type="email" name="email" class="form-control border-3 border-dark" placeholder="hello@kawaii.com">
+                        <input type="email" name="email" class="form-control border-3 border-dark" placeholder="hello@kawaii.com" required>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-4 text-start">
                         <label class="fw-bold">Password</label>
-                        <input type="password" name="password" class="form-control border-3 border-dark" placeholder="••••••••">
+                        <input type="password" name="password" class="form-control border-3 border-dark" placeholder="••••••••" required>
                     </div>
-                    <button type="submit" class="btn btn-kawaii w-100 py-2">CREATE ACCOUNT</button>
+                    <button type="submit" class="btn btn-kawaii w-100 py-2 fw-bold border-3 border-dark" style="box-shadow: 4px 4px 0px black;">
+                        CREATE ACCOUNT ✨
+                    </button>
                 </form>
+
+                <div class="mt-4 text-center">
+                    <p class="mb-0 fw-bold">Already have an account? <a href="{{ base_url }}/login" class="text-pink fw-bold" style="color: #ff69b4;">Login here!</a></p>
+                </div>
             </div>
         </div>
     </div>
