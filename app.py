@@ -1,5 +1,4 @@
 import os
-import sqlite3
 from werkzeug.middleware.shared_data import SharedDataMiddleware
 from werkzeug.wrappers import Request, Response
 from werkzeug.routing import Map, Rule
@@ -7,15 +6,45 @@ from werkzeug.exceptions import NotFound, MethodNotAllowed
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.serving import run_simple
 from werkzeug.utils import redirect
+from sqlalchemy import create_engine, Column, Integer, String, Float, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 BASE_URL = "" 
-DATABASE = "products.db"
-USER_DB = "users.db"
+PROD_DB_URL = "sqlite:///products.db"
+USER_DB_URL = "sqlite:///users.db"
+
+Base = declarative_base()
+
+class Product(Base):
+    __tablename__ = 'products'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    brand = Column(String)
+    price = Column(Float)
+    stock = Column(Integer)
+    image = Column(String)
+    category = Column(String)
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    email = Column(String, unique=True)
+    password = Column(String)
+    is_admin = Column(Integer, default=0)
+
+prod_engine = create_engine(PROD_DB_URL)
+user_engine = create_engine(USER_DB_URL)
+
+SessionProd = sessionmaker(bind=prod_engine)
+SessionUser = sessionmaker(bind=user_engine)
+
+Base.metadata.create_all(prod_engine)
+Base.metadata.create_all(user_engine)
 
 env = Environment(loader=FileSystemLoader("templates"))
 
 def render(template, request, **context):
-    # Check both URL and Hidden Form fields for admin/user status
     is_admin = request.args.get('admin') == 'True' or request.form.get('admin') == 'True'
     user_id = request.args.get('user_id') or request.form.get('user_id')
     
@@ -48,28 +77,28 @@ def login(request):
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        with sqlite3.connect(USER_DB, timeout=20) as conn:
-            conn.row_factory = sqlite3.Row
-            user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         
-        if user and user['password'] == password:
-            is_admin = True if user['is_admin'] == 1 else False
-            return redirect(f"/products?msg=Welcome+back!&admin={is_admin}&user_id={user['id']}")
+        db_session = SessionUser()
+        user = db_session.query(User).filter_by(email=email).first()
+        
+        if user and user.password == password:
+            is_admin = True if user.is_admin == 1 else False
+            uid = user.id
+            db_session.close()
+            return redirect(f"/products?msg=Welcome+back!&admin={is_admin}&user_id={uid}")
         else:
+            db_session.close()
             error = "Invalid credentials. Please try again! 🌸"
     return render("login.html", request, title="Login", error=error)
 
 def products(request):
     msg = request.args.get('msg')
-    with sqlite3.connect(DATABASE, timeout=20) as conn:
-        conn.row_factory = sqlite3.Row 
-        cursor = conn.cursor()
-        try:
-            cursor.execute("SELECT * FROM products")
-            product_items = cursor.fetchall()
-        except sqlite3.OperationalError:
-            product_items = []
-            
+    db_session = SessionProd()
+    try:
+        product_items = db_session.query(Product).all()
+    except:
+        product_items = []
+    db_session.close()
     return render("products.html", request, title="Products", product_items=product_items, msg=msg)
 
 def add_product(request):
@@ -77,17 +106,18 @@ def add_product(request):
     user_id = request.args.get('user_id') or request.form.get('user_id')
 
     if request.method == "POST":
-        name = request.form.get("name")
-        brand = request.form.get("brand")
-        price = float(request.form.get("price", 0))
-        stock = int(request.form.get("stock", 0))
-        image = request.form.get("image")
-        category = request.form.get("category")
-        with sqlite3.connect(DATABASE, timeout=20) as conn:
-            conn.execute(
-                "INSERT INTO products (name, brand, price, stock, image, category) VALUES (?, ?, ?, ?, ?, ?)",
-                (name, brand, price, stock, image, category)
-            )
+        db_session = SessionProd()
+        new_product = Product(
+            name=request.form.get("name"),
+            brand=request.form.get("brand"),
+            price=float(request.form.get("price", 0)),
+            stock=int(request.form.get("stock", 0)),
+            image=request.form.get("image"),
+            category=request.form.get("category")
+        )
+        db_session.add(new_product)
+        db_session.commit()
+        db_session.close()
         return redirect(f"/products?msg=Product+Added!+✨&admin={is_admin}&user_id={user_id}")
     return render("add_product.html", request, title="Add New Product")
 
@@ -95,29 +125,31 @@ def edit_product(request, id):
     is_admin = request.args.get('admin') == 'True' or request.form.get('admin') == 'True'
     user_id = request.args.get('user_id') or request.form.get('user_id')
 
+    db_session = SessionProd()
+    product = db_session.query(Product).get(id)
+
     if request.method == "POST":
-        name = request.form.get("name")
-        brand = request.form.get("brand")
-        price = float(request.form.get("price", 0))
-        stock = int(request.form.get("stock", 0))
-        image = request.form.get("image")
-        category = request.form.get("category")
-        with sqlite3.connect(DATABASE, timeout=20) as conn:
-            conn.execute(
-                "UPDATE products SET name=?, brand=?, price=?, stock=?, image=?, category=? WHERE id=?",
-                (name, brand, price, stock, image, category, id)
-            )
+        product.name = request.form.get("name")
+        product.brand = request.form.get("brand")
+        product.price = float(request.form.get("price", 0))
+        product.stock = int(request.form.get("stock", 0))
+        product.image = request.form.get("image")
+        product.category = request.form.get("category")
+        db_session.commit()
+        db_session.close()
         return redirect(f"/products?msg=Changes+Saved!+🌸&admin={is_admin}&user_id={user_id}")
-    with sqlite3.connect(DATABASE, timeout=20) as conn:
-        conn.row_factory = sqlite3.Row
-        product = conn.execute("SELECT * FROM products WHERE id = ?", (id,)).fetchone()
+    
     return render("edit_product.html", request, title="Edit Merch", product=product)
 
 def delete_product(request, id):
     is_admin = request.args.get('admin') == 'True'
     user_id = request.args.get('user_id')
-    with sqlite3.connect(DATABASE, timeout=20) as conn:
-        conn.execute("DELETE FROM products WHERE id = ?", (id,))
+    db_session = SessionProd()
+    product = db_session.query(Product).get(id)
+    if product:
+        db_session.delete(product)
+        db_session.commit()
+    db_session.close()
     return redirect(f"/products?msg=Item+Deleted.+🗑️&admin={is_admin}&user_id={user_id}")
 
 def register(request):
@@ -129,12 +161,16 @@ def register(request):
         if not email or not password:
             error = "Both email and password are required!"
         else:
+            db_session = SessionUser()
             try:
-                with sqlite3.connect(USER_DB, timeout=20) as conn:
-                    conn.execute("INSERT INTO users (email, password, is_admin) VALUES (?, ?, 0)", (email, password))
+                new_user = User(email=email, password=password, is_admin=0)
+                db_session.add(new_user)
+                db_session.commit()
                 success = f"Welcome to Anik Kawaii, {email}!"
-            except sqlite3.IntegrityError:
+            except:
                 error = "That email is already registered!"
+            finally:
+                db_session.close()
     return render("register.html", request, title="Register", error=error, success=success)
 
 def contactus(request): return render("contactus.html", request, title="Contact Us")
